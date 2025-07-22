@@ -1,13 +1,17 @@
 import LRUCache, { Options } from 'lru-cache';
-import cloneDeep from 'lodash.clonedeep';
 
-import { Config, Cache, Store } from '../caching';
+import { Cache, Config, Store } from '../caching';
+
+// Type declaration for structuredClone (available in Node.js 17+)
+declare global {
+  function structuredClone<T>(value: T): T;
+}
 
 type Lru = LRUCache<string, unknown>;
 
 function clone<T>(object: T): T {
   if (typeof object === 'object' && object !== null) {
-    return cloneDeep(object);
+    return structuredClone(object);
   }
   return object;
 }
