@@ -1,6 +1,6 @@
 {
   "name": "@exa-labs/cache-manager",
-  "version": "5.1.4-clone",
+  "version": "5.1.5-clone",
   "description": "Cache module for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json --noEmitOnError false",
     "test": "vitest",
     "release": "pnpm check && pnpm test -- --run && pnpm build && dotenv release-it",
     "fix": "pnpm lint && pnpm fmt",
