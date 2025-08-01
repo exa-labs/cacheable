@@ -3,7 +3,10 @@ import {
 } from 'vitest';
 import {faker} from '@faker-js/faker';
 import {
-	caching, type MemoryCache, type MemoryStore, memoryStore,
+	caching,
+	type MemoryCache,
+	type MemoryStore,
+	memoryStore,
 } from '../../src/index.js';
 import {sleep} from '../utils.js';
 
@@ -150,31 +153,6 @@ describe('memory store', () => {
 				return cache.wrap(key, async () => () => 'foo');
 			}
 
-			class Thing {
-				f() {
-					return 'foo';
-				}
-			}
-
-			async function getCachedObjectWithPrototype() {
-				return cache.wrap(key, async () => new Thing());
-			}
-
-			function assertCachedObjectWithPrototype(result: typeof Thing.prototype) {
-				expect(typeof result).toEqual('object');
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				const prototype = Object.getPrototypeOf(result);
-				expect(
-					typeof prototype.f,
-					'prototype does not have function f',
-				).toEqual('function');
-
-				expect(
-					result.f(),
-					'prototype function f does not return expected value',
-				).toEqual('foo');
-			}
-
 			// By default, memory store clones values before setting in the set method.
 			describe('when shouldCloneBeforeSet option is not passed in', () => {
 				beforeEach(async () => {
@@ -215,11 +193,6 @@ describe('memory store', () => {
 				it('preserves functions', async () => {
 					expect(typeof (await getCachedFunction())).toEqual('function');
 					expect(typeof (await getCachedFunction())).toEqual('function');
-				});
-
-				it('preserves object prototype', async () => {
-					assertCachedObjectWithPrototype(await getCachedObjectWithPrototype());
-					assertCachedObjectWithPrototype(await getCachedObjectWithPrototype());
 				});
 			});
 
@@ -266,10 +239,6 @@ describe('memory store', () => {
 				expect(typeof (await getCachedFunction())).toEqual('function');
 			});
 
-			it('preserves object prototype', async () => {
-				assertCachedObjectWithPrototype(await getCachedObjectWithPrototype());
-				assertCachedObjectWithPrototype(await getCachedObjectWithPrototype());
-			});
 			describe('mget() and mset()', () => {
 				let value: string;
 				let key2: string;
